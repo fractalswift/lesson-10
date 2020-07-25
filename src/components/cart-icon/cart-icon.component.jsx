@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 
 import { toggleCartHidden } from '../../redux/cart/cart.actions';
 import { selectCartItemsCount } from '../../redux/cart/cart.selectors';
@@ -22,9 +23,15 @@ const mapDispatchToProps = (dispatch) => ({
   toggleCartHidden: () => dispatch(toggleCartHidden()),
 });
 
-const mapStateToProps = (state) => ({
-  itemCount: selectCartItemsCount(state),
+const mapStateToProps = createStructuredSelector({
+  itemCount: selectCartItemsCount,
 });
+
+// before adding createStructuredSelector:
+
+// const mapStateToProps = (state) => ({
+//   itemCount: selectCartItemsCount(state),
+// });
 
 // The original of the above looked like this, but would have re-rendered with every state update
 // const mapStateToProps = ({ cart: { cartItems } }) => ({
