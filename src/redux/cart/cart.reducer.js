@@ -1,11 +1,10 @@
 import { CartActionTypes } from './cart.types';
-import { addItemToCart } from './cart.utils';
-import { addItem } from './cart.actions';
+import { addItemToCart, removeItemFromCart, decrementItem } from './cart.utils';
 
-const INITIAL_STATE = { hidden: true, cartItems: [] };
-
-// Every reducer gets every action, even if they are not relevant
-// That is why we have to have the default return state if not relevant action
+const INITIAL_STATE = {
+  hidden: true,
+  cartItems: [],
+};
 
 const cartReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -14,15 +13,23 @@ const cartReducer = (state = INITIAL_STATE, action) => {
         ...state,
         hidden: !state.hidden,
       };
-
     case CartActionTypes.ADD_ITEM:
       return {
         ...state,
-        // The line below originally read: cartItems: [...state.cartItems, action.payload],
-
         cartItems: addItemToCart(state.cartItems, action.payload),
       };
-
+    case CartActionTypes.DECREMENT_ITEM:
+      return {
+        ...state,
+        cartItems: decrementItem(state.cartItems, action.payload),
+      };
+    case CartActionTypes.CLEAR_ITEM_FROM_CART:
+      return {
+        ...state,
+        cartItems: state.cartItems.filter(
+          (cartItem) => cartItem.id !== action.payload.id
+        ),
+      };
     default:
       return state;
   }
