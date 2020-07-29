@@ -10,13 +10,14 @@ export const selectCollections = memoize(
 );
 
 // this exports collections as an array
-export const selectCollectionsAsArray = memoize(
-  createSelector([selectShop], (shop) => Object.values(shop.collections))
+export const selectCollectionsAsArray = createSelector(
+  [selectCollections],
+  (collections) =>
+    collections ? Object.keys(collections).map((key) => collections[key]) : []
 );
 
 // this is a curried fucntion because it is a functino that returns another function
 export const selectCollection = (collectionUrlParam) =>
-  createSelector(
-    [selectCollections],
-    (collections) => collections[collectionUrlParam]
+  createSelector([selectCollections], (collections) =>
+    collections ? collections[collectionUrlParam] : null
   );
